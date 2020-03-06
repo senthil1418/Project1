@@ -1,0 +1,49 @@
+In spring, dependency injection is done default by type, this means that when there are multiple 
+dependencies with the same type a NoUniqueBeanDefinitionException exception will be thrown. 
+Indicating that only one candidate can be applied. You can take control over the selection process.
+ In this tutorial we’ll see how to accomplish this with spring’s @Primary annotation or the primary
+  xml attribute of the <bean/> element. This indicates that a particular bean definition should be 
+  given preference when multiple beans are candidate to be autowired.
+
+if we configure bean for more than one time with different ids then IOC will throw an Exception. To overcome this duplicate beans problem, we can use autowire-candidate=”false” or primanry="true"
+
+Example: i have two classes Mobile and Processor
+
+Case -1: autowire-candidate=”false”
+
+<bean id="mobile" class="com.Mobile" autowire="byType">
+    <property name="mobileName" value="Redmi"></property>
+    <property name="mobileModel" value="Note 5"></property>
+</bean> 
+
+<bean id="process1" class="com.Processor" 
+autowire-candidate="false">
+    <property name="process" value="2GHz"></property>
+    <property name="ram" value="4GB"></property>
+</bean>
+
+<bean id="process2" class="com.Processor">
+
+    <property name="process" value="1GHz"></property>
+    <property name="ram" value="3GB"></property>
+</bean>
+As per above configuration, process1 bean will be ignored and process2 bean will be injected.
+
+Case -2: primanry="true"
+
+<bean id="mobile" class="com.Mobile" autowire="byType">
+    <property name="mobileName" value="Redmi"></property>
+    <property name="mobileModel" value="Note 5"></property>
+</bean> 
+
+<bean id="process1" class="com.Processor" primary="true">
+    <property name="process" value="2GHz"></property>
+    <property name="ram" value="4GB"></property>
+</bean>
+
+<bean id="process2" class="com.Processor">
+
+    <property name="process" value="1GHz"></property>
+    <property name="ram" value="3GB"></property>
+</bean>
+As per above configuration, process2 bean will be ignored and process1 bean will be injected.
